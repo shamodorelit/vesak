@@ -115,7 +115,7 @@ export function CardEditor({ template, onClose }: Props) {
 
         const shareData = {
           title: "Happy Vesak Day!",
-          text: "Make yours here: https://happy-vesak.com",
+          text: "Make yours here: https://vesak-alpha.vercel.app/",
           files: [file],
         };
 
@@ -126,11 +126,11 @@ export function CardEditor({ template, onClose }: Props) {
       }
 
       // Fallback
-      const text = encodeURIComponent(`Happy Vesak Day! ✨\nMake yours here: https://happy-vesak.com`);
+      const text = encodeURIComponent(`Happy Vesak Day! ✨\nMake yours here: https://vesak-alpha.vercel.app/`);
       window.open(`https://wa.me/?text=${text}`, "_blank");
     } catch (error) {
       console.error("Error sharing:", error);
-      const text = encodeURIComponent(`Happy Vesak Day! ✨\nMake yours here: https://happy-vesak.com`);
+      const text = encodeURIComponent(`Happy Vesak Day! ✨\nMake yours here: https://vesak-alpha.vercel.app/`);
       window.open(`https://wa.me/?text=${text}`, "_blank");
     }
   };
