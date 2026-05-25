@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Draggable from "react-draggable";
+import { Rnd } from "react-rnd";
 import { useDropzone } from "react-dropzone";
 import * as htmlToImage from "html-to-image";
 import { Upload, Download, Share2, X, ZoomIn, ZoomOut } from "lucide-react";
@@ -264,25 +265,23 @@ export function CardEditor({ template, onClose }: Props) {
                   </div>
                 )}
                 
-                {/* Greeting Text Box (Draggable & Resizable) */}
-                <div className="absolute inset-0 z-20 overflow-hidden flex items-center justify-center pointer-events-none">
-                  <Draggable nodeRef={textDragRef}>
-                    <div 
-                      ref={textDragRef} 
-                      className="cursor-move pointer-events-auto flex flex-col p-4 min-w-[200px] hover:ring-2 ring-white/50 ring-dashed rounded-lg transition-shadow"
-                      style={{ 
-                        color: greetingColor, 
-                        fontSize: `${greetingSize}px`,
-                        resize: "both",
-                        overflow: "hidden"
-                      }}
-                    >
-                      <div className="text-center font-medium drop-shadow-md whitespace-pre-wrap leading-tight text-shadow-sm w-full h-full flex items-center justify-center">
-                        {greetingText}
-                      </div>
-                    </div>
-                  </Draggable>
-                </div>
+                {/* Greeting Text Box (Draggable & Resizable for Mobile) */}
+                <Rnd
+                  default={{
+                    x: 10,
+                    y: 80,
+                    width: 300,
+                    height: 'auto',
+                  }}
+                  bounds="parent"
+                  enableResizing={{ right: true, bottom: true, bottomRight: true }}
+                  className="z-20 pointer-events-auto hover:ring-2 ring-white/50 ring-dashed rounded-lg transition-shadow flex flex-col p-4 bg-transparent"
+                  style={{ color: greetingColor, fontSize: `${greetingSize}px` }}
+                >
+                  <div className="text-center font-medium drop-shadow-md whitespace-pre-wrap leading-tight text-shadow-sm w-full h-full flex items-center justify-center">
+                    {greetingText}
+                  </div>
+                </Rnd>
 
                 {/* Draggable 'From' Box */}
                 {fromName && (

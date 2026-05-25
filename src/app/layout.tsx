@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Happy Vesak Card Maker",
+  title: "Payable Vesak Card Maker",
   description: "Create and customize beautiful Vesak greeting cards.",
 };
 

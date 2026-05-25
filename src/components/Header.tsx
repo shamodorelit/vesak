@@ -43,29 +43,10 @@ export function Header() {
             <span className="text-white text-xs font-bold text-center">☸</span>
           </div>
           <h1 className="font-bold text-lg hidden sm:block">
-            <span className="text-gradient">Vesak</span> Card Maker
+            <span className="text-gradient">Payable Vesak</span> Card Maker
           </h1>
         </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            onClick={toggleAudio}
-            className="p-2 rounded-full hover:bg-[var(--glass-bg)] transition-colors border border-transparent hover:border-[var(--glass-border)]"
-            aria-label="Toggle Audio"
-          >
-            {isAudioPlaying ? <Volume2 size={20} /> : <VolumeX size={20} />}
-          </button>
-          
-          {mounted && (
-            <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 rounded-full hover:bg-[var(--glass-bg)] transition-colors border border-transparent hover:border-[var(--glass-border)]"
-              aria-label="Toggle Theme"
-            >
-              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-          )}
-        </div>
       </div>
     </motion.header>
   );
