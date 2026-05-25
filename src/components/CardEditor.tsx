@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Draggable from "react-draggable";
@@ -40,6 +40,20 @@ export function CardEditor({ template, onClose }: Props) {
   const [greetingWidth, setGreetingWidth] = useState(250);
   const [toName, setToName] = useState("");
   const [fromName, setFromName] = useState("");
+  const [templateBase64, setTemplateBase64] = useState<string>("");
+
+  useEffect(() => {
+    // Pre-load the template image as base64 to ensure html-to-image captures it on mobile Safari
+    fetch(template.image)
+      .then(res => res.blob())
+      .then(blob => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setTemplateBase64(reader.result as string);
+        };
+        reader.readAsDataURL(blob);
+      });
+  }, [template.image]);
   
   const cardRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<HTMLDivElement>(null);
@@ -107,7 +121,7 @@ export function CardEditor({ template, onClose }: Props) {
         </button>
 
         {/* Editor Panel */}
-        <div className="w-full md:w-1/3 p-6 md:p-8 flex flex-col gap-6 border-b md:border-b-0 md:border-r border-[var(--glass-border)] max-h-[80vh] overflow-y-auto">
+        <div className="w-full md:w-1/3 p-6 md:p-8 flex flex-col gap-6 border-b md:border-b-0 md:border-r border-[var(--glass-border)] max-h-[85vh] overflow-y-auto pb-24">
           <h2 className="text-2xl font-bold">Customize Card</h2>
           
           {template.type === "photo" && (
@@ -239,7 +253,7 @@ export function CardEditor({ template, onClose }: Props) {
             <div className="relative shadow-2xl rounded-xl overflow-hidden w-full max-w-md mx-auto flex-shrink-0">
               {/* The Actual Card Canvas to Capture */}
               <div ref={cardRef} className="relative overflow-hidden" style={{ backgroundColor: '#ffffff' }}>
-                <img src={template.image} alt="Template" className="w-full h-auto block z-0 pointer-events-none" />
+                <img src={templateBase64 || template.image} alt="Template" className="w-full h-auto block z-0 pointer-events-none" crossOrigin="anonymous" />
                 
                 {/* User Photo Area */}
                 {template.type === "photo" && photo && (
