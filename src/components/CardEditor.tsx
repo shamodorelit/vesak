@@ -82,6 +82,14 @@ export function CardEditor({ template, onClose }: Props) {
       // Small delay to ensure styles are applied
       await new Promise((resolve) => setTimeout(resolve, 500));
       
+      // Safari/iOS workaround: Render once and discard to force the browser to cache and draw the canvas
+      try {
+        await htmlToImage.toPng(cardRef.current, { cacheBust: true, skipFonts: true });
+      } catch (e) {
+        // Ignore errors on first pass
+      }
+      
+      // Second pass for the actual capture
       const dataUrl = await htmlToImage.toPng(cardRef.current, {
         quality: 1,
         pixelRatio: 2,
@@ -253,7 +261,7 @@ export function CardEditor({ template, onClose }: Props) {
             <div className="relative shadow-2xl rounded-xl overflow-hidden w-full max-w-md mx-auto flex-shrink-0">
               {/* The Actual Card Canvas to Capture */}
               <div ref={cardRef} className="relative overflow-hidden" style={{ backgroundColor: '#ffffff' }}>
-                <img src={templateBase64 || template.image} alt="Template" className="w-full h-auto block z-0 pointer-events-none" crossOrigin="anonymous" />
+                <img src={templateBase64 || template.image} alt="Template" className="w-full h-auto block z-0 pointer-events-none" />
                 
                 {/* User Photo Area */}
                 {template.type === "photo" && photo && (
