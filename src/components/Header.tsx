@@ -42,7 +42,7 @@ export function Header() {
           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[var(--color-vesak-gold)] to-[var(--color-vesak-orange)] flex items-center justify-center animate-pulse">
             <span className="text-white text-xs font-bold text-center">☸</span>
           </div>
-          <h1 className="font-bold text-lg hidden sm:block">
+          <h1 className="font-bold text-base sm:text-lg block">
             <span className="text-gradient">Payable Vesak</span> Card Maker
           </h1>
         </div>
