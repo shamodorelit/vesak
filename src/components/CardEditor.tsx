@@ -4,7 +4,6 @@ import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Draggable from "react-draggable";
-import { Rnd } from "react-rnd";
 import { useDropzone } from "react-dropzone";
 import * as htmlToImage from "html-to-image";
 import { Upload, Download, Share2, X, ZoomIn, ZoomOut } from "lucide-react";
@@ -38,6 +37,7 @@ export function CardEditor({ template, onClose }: Props) {
   const [greetingText, setGreetingText] = useState(VESAK_GREETINGS[1]);
   const [greetingColor, setGreetingColor] = useState("#FFFFFF");
   const [greetingSize, setGreetingSize] = useState(16);
+  const [greetingWidth, setGreetingWidth] = useState(250);
   const [toName, setToName] = useState("");
   const [fromName, setFromName] = useState("");
   
@@ -187,18 +187,28 @@ export function CardEditor({ template, onClose }: Props) {
               />
             </div>
 
-            <div className="flex gap-4 items-center bg-black/5 p-3 rounded-lg">
-              <div className="flex flex-col flex-1">
+            <div className="grid grid-cols-3 gap-2 items-center bg-black/5 p-3 rounded-lg">
+              <div className="flex flex-col col-span-1">
                 <label className="text-xs opacity-70 mb-1">Font Size: {greetingSize}px</label>
                 <input 
                   type="range" 
                   min="12" max="48" 
                   value={greetingSize} 
                   onChange={(e) => setGreetingSize(Number(e.target.value))}
-                  className="accent-[var(--color-vesak-gold)]"
+                  className="accent-[var(--color-vesak-gold)] w-full"
                 />
               </div>
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col col-span-1">
+                <label className="text-xs opacity-70 mb-1">Box Width: {greetingWidth}px</label>
+                <input 
+                  type="range" 
+                  min="150" max="400" 
+                  value={greetingWidth} 
+                  onChange={(e) => setGreetingWidth(Number(e.target.value))}
+                  className="accent-[var(--color-vesak-gold)] w-full"
+                />
+              </div>
+              <div className="flex flex-col items-center col-span-1">
                 <label className="text-xs opacity-70 mb-1">Color</label>
                 <div className="relative w-8 h-8 rounded overflow-hidden border border-gray-400">
                   <input 
@@ -265,23 +275,25 @@ export function CardEditor({ template, onClose }: Props) {
                   </div>
                 )}
                 
-                {/* Greeting Text Box (Draggable & Resizable for Mobile) */}
-                <Rnd
-                  default={{
-                    x: 10,
-                    y: 80,
-                    width: 300,
-                    height: 'auto',
-                  }}
-                  bounds="parent"
-                  enableResizing={{ right: true, bottom: true, bottomRight: true }}
-                  className="z-20 pointer-events-auto hover:ring-2 ring-white/50 ring-dashed rounded-lg transition-shadow flex flex-col p-4 bg-transparent"
-                  style={{ color: greetingColor, fontSize: `${greetingSize}px` }}
-                >
-                  <div className="text-center font-medium drop-shadow-md whitespace-pre-wrap leading-tight text-shadow-sm w-full h-full flex items-center justify-center">
-                    {greetingText}
-                  </div>
-                </Rnd>
+                {/* Greeting Text Box (Draggable) */}
+                <div className="absolute inset-0 z-20 overflow-hidden flex items-center justify-center pointer-events-none">
+                  <Draggable nodeRef={textDragRef}>
+                    <div 
+                      ref={textDragRef} 
+                      className="cursor-move pointer-events-auto flex flex-col p-4 hover:ring-2 ring-white/50 ring-dashed rounded-lg transition-shadow bg-transparent"
+                      style={{ 
+                        color: greetingColor, 
+                        fontSize: `${greetingSize}px`,
+                        width: `${greetingWidth}px`,
+                        maxWidth: '90%'
+                      }}
+                    >
+                      <div className="text-center font-medium drop-shadow-md whitespace-pre-wrap leading-tight text-shadow-sm w-full h-full flex items-center justify-center">
+                        {greetingText}
+                      </div>
+                    </div>
+                  </Draggable>
+                </div>
 
                 {/* Draggable 'From' Box */}
                 {fromName && (
