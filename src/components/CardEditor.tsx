@@ -104,10 +104,35 @@ export function CardEditor({ template, onClose }: Props) {
     }
   };
 
-  const shareToWhatsApp = () => {
+  const shareToWhatsApp = async () => {
     if (!generatedCard) return;
-    const text = encodeURIComponent(`Happy Vesak Day! ✨\nMake yours here: https://happy-vesak.com`);
-    window.open(`https://wa.me/?text=${text}`, "_blank");
+
+    try {
+      if (navigator.share) {
+        const response = await fetch(generatedCard);
+        const blob = await response.blob();
+        const file = new File([blob], "Vesak_Greeting_Card.png", { type: "image/png" });
+
+        const shareData = {
+          title: "Happy Vesak Day!",
+          text: "Make yours here: https://happy-vesak.com",
+          files: [file],
+        };
+
+        if (navigator.canShare && navigator.canShare(shareData)) {
+          await navigator.share(shareData);
+          return; 
+        }
+      }
+
+      // Fallback
+      const text = encodeURIComponent(`Happy Vesak Day! ✨\nMake yours here: https://happy-vesak.com`);
+      window.open(`https://wa.me/?text=${text}`, "_blank");
+    } catch (error) {
+      console.error("Error sharing:", error);
+      const text = encodeURIComponent(`Happy Vesak Day! ✨\nMake yours here: https://happy-vesak.com`);
+      window.open(`https://wa.me/?text=${text}`, "_blank");
+    }
   };
 
   const handleDownload = () => {
@@ -119,8 +144,8 @@ export function CardEditor({ template, onClose }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto pt-20 pb-10">
-      <div className="relative w-full max-w-5xl glass rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-start md:items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto pt-6 pb-10">
+      <div className="relative w-full max-w-5xl glass rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-2xl mt-12 md:mt-0">
         <button 
           onClick={onClose}
           className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/20 hover:bg-white/40 transition-colors text-white"
