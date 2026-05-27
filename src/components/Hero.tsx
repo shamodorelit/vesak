@@ -1,10 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 export function Hero() {
   const scrollToTemplates = () => {
     document.getElementById("templates-section")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const videos = ["/templates/Video 1.mp4", "/templates/Video 2.mp4"];
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+
+  const handleVideoEnded = () => {
+    setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % videos.length);
   };
 
   return (
@@ -42,13 +50,14 @@ export function Hero() {
             className="relative mx-auto max-w-2xl rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(255,215,0,0.2)] border border-[var(--color-vesak-gold)]/30 aspect-video bg-black/5 dark:bg-white/5 flex items-center justify-center z-20"
           >
             <video 
+              key={currentVideoIndex}
               className="w-full h-full object-cover"
-              src="/templates/Video 1.mp4" 
+              src={videos[currentVideoIndex]} 
               controls 
               autoPlay 
               muted 
-              loop 
               playsInline
+              onEnded={handleVideoEnded}
             >
               Your browser does not support the video tag.
             </video>
