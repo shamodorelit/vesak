@@ -1,3 +1,10 @@
+---
+name: lkpos-operations
+description: LKpos cloud ERP and POS operations runbook, fiscal compliance, hardware troubleshooting, and data formatting.
+author: Shamod
+version: 1.0.0
+---
+
 # LKpos Cloud ERP & POS Operations Skill
 
 Comprehensive operational runbook and domain guide for LKpos — a multi-tenant cloud-based POS and ERP platform serving retail, supermarkets, restaurants, pharmacies, and wholesale businesses across Sri Lanka.
